@@ -2,10 +2,18 @@
   "name": "templater",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Elias Leguizamon",
+    "email": "frontend@magneticash.com"
+  },
+  "description": "A simple example of electron app",
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "electron-is-dev": "^1.2.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -15,7 +23,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && electron .",
+    "mac": "npm run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "win": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "pref": "npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js"
   },
   "eslintConfig": {
     "extends": [
@@ -25,14 +38,36 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 electron version"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 electron version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "electron": "^9.1.1",
+    "electron-builder": "^23.0.3",
+    "wait-on": "^5.1.0"
+  },
+  "build": {
+    "appId": "com.electron.templater",
+    "productName": "Templater",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "deb"
+    }
   }
 }
